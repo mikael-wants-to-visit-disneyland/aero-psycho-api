@@ -14,8 +14,14 @@ provider:
         - Effect: Allow
           Action:
             - sqs:SendMessage
+            - 'dynamodb:PutItem'
+            - 'dynamodb:Get*'
+            - 'dynamodb:Scan*'
+            - 'dynamodb:UpdateItem'
+            - 'dynamodb:DeleteItem'
           Resource:
             - Fn::GetAtt: [ receiverQueue, Arn ]
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-addOrder-${sls:stage}
   environment:
     DYNAMODB_ORDERS_TABLE: ${self:service}-ordersTable-${sls:stage}
       
@@ -35,6 +41,14 @@ functions:
             Fn::GetAtt:
               - receiverQueue
               - Arn
+
+  addOrder:
+    handler: addOrder.addOrder
+    events:
+      - httpApi:
+          path: /
+          method: post
+
 resources:
   Resources:
     receiverQueue:
