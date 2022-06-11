@@ -1,0 +1,55 @@
+app: genflow
+org: mkoskela
+service: aws-node-typescript-sqs-standard
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+          Resource:
+            - Fn::GetAtt: [ receiverQueue, Arn ]
+  environment:
+    DYNAMODB_ORDERS_TABLE: ${self:service}-ordersTable-${sls:stage}
+      
+functions:
+  sender:
+    handler: handler.sender
+    events:
+      - http:
+          method: post
+          path: sender
+
+  receiver:
+    handler: handler.receiver
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - receiverQueue
+              - Arn
+resources:
+  Resources:
+    receiverQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: receiverQueue
+
+    CustomerTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: primary_key
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: primary_key
+            KeyType: HASH
+        TableName: ${self:service}-customerTable-${sls:stage}
