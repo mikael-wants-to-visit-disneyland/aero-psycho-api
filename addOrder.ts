@@ -27,15 +27,13 @@ export interface IItem {
   totalPrice: number;
 }
 
-module.exports.addOrder = async (event) => {
-  const body = JSON.parse(Buffer.from(event.body, "base64").toString());
+export const addOrder = async (order: IOrder, id: string) => {
   const dynamoDb = new AWS.DynamoDB.DocumentClient();
   const putParams = {
     TableName: process.env.DYNAMODB_ORDERS_TABLE,
-    Item: {
-      primary_key: body.name,
-      email: body.email,
-    },
+    Key: { id },
+    ConditionExpression: "attribute_not_exists(id)", // Ensures idempotency, as explained in https://cloudonaut.io/your-lambda-function-might-execute-twice-deal-with-it/
+    Item: { id, ...order },
   };
   await dynamoDb.put(putParams).promise();
 

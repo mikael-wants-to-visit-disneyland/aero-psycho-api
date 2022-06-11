@@ -1,11 +1,13 @@
-import { SQSHandler, SQSMessageAttributes } from 'aws-lambda';
+import { SQSHandler } from "aws-lambda";
+import { addOrder, IOrder } from "../addOrder";
 
 const receiver: SQSHandler = async (event) => {
   try {
     for (const record of event.Records) {
-      const messageAttributes: SQSMessageAttributes = record.messageAttributes;
-      console.log(messageAttributes);
-      // Do something
+      const order: IOrder = JSON.parse(
+        Buffer.from(record.body, "base64").toString()
+      );
+      addOrder(order, record.messageId);
     }
   } catch (error) {
     console.log(error);
