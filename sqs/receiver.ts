@@ -1,5 +1,6 @@
 import { SQSHandler } from "aws-lambda";
-import { addOrder, IOrder } from "../addOrder";
+import { addOrder } from "../addOrder";
+import { IOrder } from "../interfaces";
 
 const receiver: SQSHandler = async (event) => {
   try {

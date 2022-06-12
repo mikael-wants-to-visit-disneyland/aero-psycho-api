@@ -44,22 +44,22 @@ Note that all of these fields are required; they cannot be the empty string.
 
 ### Viewing orders
 
-- Get all orders for a seller:
+Get all orders for a seller:
 
 ```
-curl --url '{ url }?sellerId=booboo'`
+curl --url '{ url }?sellerId=booboo'
 ```
 
-- Get an order by the `sellerId` and `orderId`:
+Get an order by the `sellerId` and `orderId`:
 
 ```
-curl --url '{ url }?sellerId=booboo&orderId=5903'`
+curl --url '{ url }?sellerId=booboo&orderId=5903'
 ```
 
-- Get all orders between certain dates:
+Get all orders between certain dates:
 
 ```
-curl --url '{ url }?startDate=2022-02-01&endDate=2022-09-23'`
+curl --url '{ url }?startDate=2022-02-01&endDate=2022-09-23'
 ```
 
 You can use any combination of these three parameters.
@@ -73,6 +73,6 @@ In order to enable filtering by more attributes, simply add them to these two pl
 
 ## Todo
 
-- Automated tests
+- Automated tests using jest, for each of the lambdas, as well as the extracted units (currently only `addOrder`).
 
-- If yup validation results in an error, it seems that for some reason `receiver` keeps on getting invoked to the end of time, as shown by the repeated logging of the same error. Have to make it stop. Alternatively, try switching from yup to JSON Schema Validator.
+- If yup validation results in an error, it seems that for some reason `receiver` keeps on getting invoked forever, as shown by the repeated logging of the same error. Have to make it stop. Alternatively, try switching from yup to JSON Schema Validator.
