@@ -1,6 +1,6 @@
 # Webhook Handler
 
-A handler for enabling e-commerce platforms to send orders to our platform. This is a serverless solution, with Lambda as the processor, SNS as the queue engine, and DynamoDB as the storage layer.
+A handler for enabling e-commerce platforms to send orders to our platform. This is a serverless solution, with Lambda as the processor, SQS as the queue engine, and DynamoDB as the storage layer.
 
 ## Usage
 
