@@ -1,6 +1,8 @@
 "use strict";
 import { DynamoDB } from "aws-sdk";
 
+const filterableFields = ["sellerId", "orderId"] as const;
+
 /* Transform the query string parameters into the DynamoDB filter expression, 
    alongside the expression's key and value input objects. */
 const getFilterExpressionParams: (filterParams: Record<string, string>) => {
@@ -25,9 +27,15 @@ const getFilterExpressionParams: (filterParams: Record<string, string>) => {
 };
 
 module.exports.getOrders = async (event) => {
-  // make the queryable keys into env vars
+  /* Check that every query string parameter corresponds to a filterable field. */
+  Object.keys(event.queryStringParameters).forEach((param) => {
+    if (!filterableFields.find((field) => field === param)) {
+      return {
+        statusCode: 400,
+      };
+    }
+  });
 
-  // do check and statuscode error return for bad parameter
   const scanParams = {
     TableName: process.env.DYNAMODB_ORDERS_TABLE,
     ...getFilterExpressionParams(event.queryStringParameters),

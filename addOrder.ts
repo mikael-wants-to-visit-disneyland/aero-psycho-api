@@ -3,7 +3,7 @@ import { DynamoDB } from "aws-sdk";
 
 export interface IOrder {
   orderId: string;
-  dateCreated: string;
+  dateCreated: string; // have to check the YYYY-MM-DD format, as it is needed for he filter expression
   sellerId: string;
   address: IAddress;
   items: IItem[];
@@ -29,7 +29,6 @@ export interface IItem {
 
 export const addOrder = async (order: IOrder, id: string) => {
   const dynamoDb = new DynamoDB.DocumentClient();
-  console.log("BUU");
   await dynamoDb
     .put({
       TableName: process.env.DYNAMODB_ORDERS_TABLE,
@@ -37,8 +36,6 @@ export const addOrder = async (order: IOrder, id: string) => {
       Item: { id, sellerId: order.sellerId, ...order },
     })
     .promise();
-
-  console.log("DONE");
 
   return {
     statusCode: 201,

@@ -70,15 +70,19 @@ resources:
             AttributeType: S
           - AttributeName: orderId
             AttributeType: S
+          - AttributeName: dateCreated
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: sellerId
+            KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: secondaryIndex
             KeySchema:
-              - AttributeName: sellerId
-                KeyType: HASH
               - AttributeName: orderId
+                KeyType: HASH
+              - AttributeName: dateCreated
                 KeyType: RANGE
             Projection:
               ProjectionType: "ALL"
