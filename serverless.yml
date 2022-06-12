@@ -68,9 +68,18 @@ resources:
             AttributeType: S
           - AttributeName: sellerId
             AttributeType: S
+          - AttributeName: orderId
+            AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: sellerId
-            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: secondaryIndex
+            KeySchema:
+              - AttributeName: sellerId
+                KeyType: HASH
+              - AttributeName: orderId
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
         TableName: ${self:service}-ordersTable-${sls:stage}

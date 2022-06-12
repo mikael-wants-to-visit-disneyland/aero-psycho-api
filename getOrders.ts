@@ -1,6 +1,8 @@
 "use strict";
 import { DynamoDB } from "aws-sdk";
 
+/* Transform the query string parameters into the DynamoDB filter expression, 
+   alongside the expression's key and value input objects. */
 const getFilterExpressionParams: (filterParams: Record<string, string>) => {
   FilterExpression: string;
   ExpressionAttributeNames: Record<string, string>;
