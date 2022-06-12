@@ -4,9 +4,9 @@ A handler for enabling e-commerce platforms to send orders to our platform. This
 
 ## Usage
 
-### Inititalizing
+### Initializing
 
-Use `serverless deploy` to get started. Upon success, the urls of the POST and tge GET will be printed out. Use them in the following requests.
+Use `serverless deploy` to get started. Upon success, the urls of the POST and the GET will be printed out. Use them in the following requests.
 
 ### Adding orders
 
@@ -62,7 +62,7 @@ Get all orders between certain dates:
 curl --url '{ url }?startDate=2022-02-01&endDate=2022-09-23'
 ```
 
-You can use any combination of these three parameters.
+You can use any combination of these parameters.
 
 ### Adding attributes
 
@@ -71,8 +71,10 @@ In order to enable filtering by more attributes, simply add them to these two pl
 1. `AttributeDefinitions` and `GlobalSecondaryIndexes` in `serverless.yml > resources > ordersTable`
 2. `queryStringParamsFilterAttributes` in `getOrders`
 
+## Debugging
+
+Do `sls logs -f <func> -t` in another terminal to view the logs for a func as they are received.
+
 ## Todo
 
-- Automated tests using jest, for each of the lambdas, as well as the extracted units (currently only `addOrder`).
-
-- If yup validation results in an error, it seems that for some reason `receiver` keeps on getting invoked forever, as shown by the repeated logging of the same error. Have to make it stop. Alternatively, try switching from yup to JSON Schema Validator.
+If you want to contribute, it would be great to get some automated tests using jest, for each of the lambdas, as well as for the extracted units (currently only `addOrder`).
