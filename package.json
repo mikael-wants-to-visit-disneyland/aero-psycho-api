@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "aws-lambda": "^0.1.2",
-    "source-map-support": "^0.5.10"
+    "moment": "^2.29.3",
+    "source-map-support": "^0.5.10",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
@@ -20,7 +22,7 @@
     "ts-loader": "^5.3.3",
     "tslint": "^5.20.0",
     "tslint-config-airbnb": "^5.11.2",
-    "typescript": "^3.2.4",
+    "typescript": "^3.8",
     "webpack": "^4.29.0"
   },
   "author": "Miguel Frazao (https://github.com/jmpfrazao/serverless-ts-standard-sqs)",
