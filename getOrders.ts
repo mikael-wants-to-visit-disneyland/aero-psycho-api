@@ -2,7 +2,6 @@
 import { DynamoDB } from "aws-sdk";
 
 module.exports.getOrders = async (event) => {
-  console.log(event);
   const scanParams = {
     TableName: process.env.DYNAMODB_ORDERS_TABLE,
   };
@@ -18,13 +17,7 @@ module.exports.getOrders = async (event) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify(result),
+    body: JSON.stringify(result.Items),
     headers: { "Content-Type": "application/json" },
-    //   items: await result.Items.map((customer) => {
-    //     return {
-    //       name: customer.primary_key,
-    //       email: customer.email,
-    //     };
-    //   }),
   };
 };
