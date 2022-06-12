@@ -34,7 +34,7 @@ export const addOrder = async (order: IOrder, id: string) => {
     .put({
       TableName: process.env.DYNAMODB_ORDERS_TABLE,
       //ConditionExpression: "attribute_not_exists(id)", // Ensures idempotency, as explained in https://cloudonaut.io/your-lambda-function-might-execute-twice-deal-with-it/
-      Item: { id, ...order },
+      Item: { id, sellerId: order.sellerId, ...order },
     })
     .promise();
 

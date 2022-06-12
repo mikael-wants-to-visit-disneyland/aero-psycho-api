@@ -2,8 +2,18 @@
 import { DynamoDB } from "aws-sdk";
 
 module.exports.getOrders = async (event) => {
+  console.log(event.queryStringParameters);
+
+  // do check and statuscode error return for bad parameter
   const scanParams = {
     TableName: process.env.DYNAMODB_ORDERS_TABLE,
+    FilterExpression: "#sid = :sid",
+    ExpressionAttributeNames: {
+      "#sid": "sellerId",
+    },
+    ExpressionAttributeValues: {
+      ":sid": "guuuuu",
+    },
   };
 
   const dynamoDB = new DynamoDB.DocumentClient();
