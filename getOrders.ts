@@ -1,7 +1,16 @@
 "use strict";
 import { DynamoDB } from "aws-sdk";
+import _ from "lodash";
 
-const filterableFields = ["sellerId", "orderId"] as const;
+const queryStringParamsFilterAttributes: Record<
+  string,
+  { attribute: string; comparison: string }
+> = {
+  sellerId: { attribute: "sellerId", comparison: "=" },
+  orderId: { attribute: "orderId", comparison: "=" },
+  startDate: { attribute: "dateCreated", comparison: ">=" },
+  endDate: { attribute: "dateCreated", comparison: "<=" },
+};
 
 /* Transform the query string parameters into the DynamoDB filter expression, 
    alongside the expression's key and value input objects. */
@@ -10,29 +19,40 @@ const getFilterExpressionParams: (filterParams: Record<string, string>) => {
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
 } = (filterParams) => {
-  const attributeNames = Object.keys(filterParams).map((name, i) => ({
-    [`#${i}`]: name,
-  }));
-  const attributeValues = Object.values(filterParams).map((value, i) => ({
-    [`:${i}`]: value,
-  }));
-  const filterExpression = attributeNames
-    .map((_, i) => `#${i} = :${i}`)
+  const FilterExpression = Object.keys(filterParams)
+    .map(
+      (name, i) =>
+        `#${i} ${queryStringParamsFilterAttributes[name].comparison} :${i}`
+    )
     .join(" AND ");
+  const ExpressionAttributeNames = Object.assign(
+    {},
+    ...Object.keys(filterParams).map((name, i) => ({
+      [`#${i}`]: queryStringParamsFilterAttributes[name].attribute,
+    }))
+  );
+  const ExpressionAttributeValues = Object.assign(
+    {},
+    ...Object.values(filterParams).map((value, i) => ({
+      [`:${i}`]: value,
+    }))
+  );
   return {
-    FilterExpression: filterExpression,
-    ExpressionAttributeNames: Object.assign({}, ...attributeNames),
-    ExpressionAttributeValues: Object.assign({}, ...attributeValues),
+    FilterExpression,
+    ExpressionAttributeNames,
+    ExpressionAttributeValues,
   };
 };
 
 module.exports.getOrders = async (event) => {
   /* Check that every query string parameter corresponds to a filterable field. */
   Object.keys(event.queryStringParameters).forEach((param) => {
-    if (!filterableFields.find((field) => field === param)) {
-      return {
-        statusCode: 400,
-      };
+    if (
+      !Object.keys(queryStringParamsFilterAttributes).find(
+        (field) => field === param
+      )
+    ) {
+      console.error(`Query string parameter ${param} is not valid.`);
     }
   });
 
@@ -44,6 +64,7 @@ module.exports.getOrders = async (event) => {
   const result = await dynamoDB.scan(scanParams).promise();
 
   if (result.Count === 0) {
+    console.log("dynamoDB scan yielded an empty result.");
     return {
       statusCode: 404,
     };
