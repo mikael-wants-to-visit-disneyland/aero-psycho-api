@@ -1,5 +1,5 @@
-app: genflow
-org: mkoskela
+app: webhook
+org: <org>
 service: aws-node-typescript-sqs-standard
 
 plugins:
