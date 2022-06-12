@@ -1,5 +1,5 @@
 "use strict";
-const AWS = require("aws-sdk");
+import { DynamoDB } from "aws-sdk";
 
 export interface IOrder {
   orderId: string;
@@ -28,14 +28,17 @@ export interface IItem {
 }
 
 export const addOrder = async (order: IOrder, id: string) => {
-  const dynamoDb = new AWS.DynamoDB.DocumentClient();
-  const putParams = {
-    TableName: process.env.DYNAMODB_ORDERS_TABLE,
-    Key: { id },
-    ConditionExpression: "attribute_not_exists(id)", // Ensures idempotency, as explained in https://cloudonaut.io/your-lambda-function-might-execute-twice-deal-with-it/
-    Item: { id, ...order },
-  };
-  await dynamoDb.put(putParams).promise();
+  const dynamoDb = new DynamoDB.DocumentClient();
+  console.log("BUU");
+  await dynamoDb
+    .put({
+      TableName: process.env.DYNAMODB_ORDERS_TABLE,
+      //ConditionExpression: "attribute_not_exists(id)", // Ensures idempotency, as explained in https://cloudonaut.io/your-lambda-function-might-execute-twice-deal-with-it/
+      Item: { id, ...order },
+    })
+    .promise();
+
+  console.log("DONE");
 
   return {
     statusCode: 201,

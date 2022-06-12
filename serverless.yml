@@ -14,17 +14,20 @@ provider:
         - Effect: Allow
           Action:
             - sqs:SendMessage
-            - 'dynamodb:PutItem'
-            - 'dynamodb:Get*'
-            - 'dynamodb:Scan*'
-            - 'dynamodb:UpdateItem'
-            - 'dynamodb:DeleteItem'
+            - "dynamodb:PutItem"
+            - "dynamodb:Get*"
+            - "dynamodb:Scan*"
+            - "dynamodb:UpdateItem"
+            - "dynamodb:DeleteItem"
           Resource:
-            - Fn::GetAtt: [ receiverQueue, Arn ]
-            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-addOrder-${sls:stage}
+            - Fn::GetAtt: [receiverQueue, Arn]
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-sender-${sls:stage}
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-receiver-${sls:stage}
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-getOrders-${sls:stage}
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-ordersTable-${sls:stage}
   environment:
     DYNAMODB_ORDERS_TABLE: ${self:service}-ordersTable-${sls:stage}
-      
+
 functions:
   sender:
     handler: handler.sender
@@ -42,12 +45,12 @@ functions:
               - receiverQueue
               - Arn
 
-  addOrder:
-    handler: addOrder.addOrder
+  getOrders:
+    handler: getOrders.getOrders
     events:
       - httpApi:
-          path: /
-          method: post
+          path: /getOrders
+          method: get
 
 resources:
   Resources:
@@ -56,14 +59,14 @@ resources:
       Properties:
         QueueName: receiverQueue
 
-    CustomerTable:
+    ordersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        AttributeDefinitions:
-          - AttributeName: primary_key
-            AttributeType: S
         BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
         KeySchema:
-          - AttributeName: primary_key
+          - AttributeName: id
             KeyType: HASH
-        TableName: ${self:service}-customerTable-${sls:stage}
+        TableName: ${self:service}-ordersTable-${sls:stage}
