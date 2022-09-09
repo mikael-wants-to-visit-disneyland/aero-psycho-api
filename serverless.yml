@@ -1,4 +1,4 @@
-service: aws-node-typescript-sqs-standard
+service: flights-webhook
 
 plugins:
   - serverless-webpack
@@ -75,12 +75,20 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: originAirportId
+          - AttributeName: flightCode
             KeyType: RANGE
         GlobalSecondaryIndexes:
-          - IndexName: secondaryIndex
+          - IndexName: originDateIndex
             KeySchema:
-              - AttributeName: flightCode
+              - AttributeName: originAirportId
+                KeyType: HASH
+              - AttributeName: date
+                KeyType: RANGE
+            Projection:
+              ProjectionType: "ALL"
+          - IndexName: destinationDateIndex
+            KeySchema:
+              - AttributeName: destinationAirportId
                 KeyType: HASH
               - AttributeName: date
                 KeyType: RANGE
