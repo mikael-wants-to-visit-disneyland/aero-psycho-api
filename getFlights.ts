@@ -6,10 +6,10 @@ const queryStringParamsFilterAttributes: Record<
   string,
   { attribute: string; comparison: string }
 > = {
-  sellerId: { attribute: "sellerId", comparison: "=" },
-  orderId: { attribute: "orderId", comparison: "=" },
-  startDate: { attribute: "dateCreated", comparison: ">=" },
-  endDate: { attribute: "dateCreated", comparison: "<=" },
+  airportId: { attribute: "airportId", comparison: "=" },
+  flightId: { attribute: "flightId", comparison: "=" },
+  startDate: { attribute: "date", comparison: ">=" },
+  endDate: { attribute: "date", comparison: "<=" },
 };
 
 /* Transform the query string parameters into the DynamoDB filter expression, 
@@ -44,7 +44,7 @@ const getFilterExpressionParams: (filterParams: Record<string, string>) => {
   };
 };
 
-module.exports.getOrders = async (event) => {
+module.exports.getFlights = async (event) => {
   /* Check that every query string parameter corresponds to a filterable field. */
   Object.keys(event.queryStringParameters).forEach((param) => {
     if (

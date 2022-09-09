@@ -1,8 +1,8 @@
 "use strict";
 import { DynamoDB } from "aws-sdk";
-import { IOrder, orderSchema } from "./interfaces";
+import { IFlight, flightSchema } from "./interfaces";
 
-export const addOrder = async (order: IOrder, id: string) => {
+export const addFlight = async (flight: IFlight, id: string) => {
   const dynamoDb = new DynamoDB.DocumentClient();
   await dynamoDb
     .put({
@@ -10,7 +10,7 @@ export const addOrder = async (order: IOrder, id: string) => {
       ConditionExpression: "attribute_not_exists(id)", // Ensures idempotency, as explained in https://cloudonaut.io/your-lambda-function-might-execute-twice-deal-with-it/
       Item: {
         id,
-        ...(await orderSchema.validate(order)),
+        ...(await flightSchema.validate(flight)),
       },
     })
     .promise();

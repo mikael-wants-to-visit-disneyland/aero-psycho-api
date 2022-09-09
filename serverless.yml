@@ -23,10 +23,10 @@ provider:
             - Fn::GetAtt: [receiverQueue, Arn]
             - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-sender-${sls:stage}
             - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-receiver-${sls:stage}
-            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-getOrders-${sls:stage}
-            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-ordersTable-${sls:stage}
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-getFlights-${sls:stage}
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-flightsTable-${sls:stage}
   environment:
-    DYNAMODB_ORDERS_TABLE: ${self:service}-ordersTable-${sls:stage}
+    DYNAMODB_ORDERS_TABLE: ${self:service}-flightsTable-${sls:stage}
 
 functions:
   sender:
@@ -45,11 +45,11 @@ functions:
               - receiverQueue
               - Arn
 
-  getOrders:
-    handler: getOrders.getOrders
+  getFlights:
+    handler: getFlights.getFlights
     events:
       - httpApi:
-          path: /getOrders
+          path: /getFlights
           method: get
 
 resources:
@@ -59,31 +59,31 @@ resources:
       Properties:
         QueueName: receiverQueue
 
-    ordersTable:
+    flightsTable:
       Type: AWS::DynamoDB::Table
       Properties:
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: sellerId
+          - AttributeName: airportId
             AttributeType: S
-          - AttributeName: orderId
+          - AttributeName: flightId
             AttributeType: S
-          - AttributeName: dateCreated
+          - AttributeName: date
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: sellerId
+          - AttributeName: airportId
             KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: secondaryIndex
             KeySchema:
-              - AttributeName: orderId
+              - AttributeName: flightId
                 KeyType: HASH
-              - AttributeName: dateCreated
+              - AttributeName: date
                 KeyType: RANGE
             Projection:
               ProjectionType: "ALL"
-        TableName: ${self:service}-ordersTable-${sls:stage}
+        TableName: ${self:service}-flightsTable-${sls:stage}

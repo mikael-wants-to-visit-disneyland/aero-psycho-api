@@ -37,25 +37,25 @@ export const itemSchema = yup.object().shape({
   totalPrice: yup.number().required(),
 });
 
-export interface IOrder {
-  orderId: string;
-  dateCreated: string;
-  sellerId: string;
+export interface IFlight {
+  flightId: string;
+  date: string;
+  airportId: string;
   address: IAddress;
   items: IItem[];
 }
 
-export const orderSchema = yup.object().shape({
-  orderId: yup.string().required(),
-  dateCreated: yup
+export const flightSchema = yup.object().shape({
+  flightId: yup.string().required(),
+  date: yup
     .string()
     .test(
       "date-format",
-      "dateCreated is not in the format YYYY-MM-DD, as required for DynamoDB filtering.",
+      "date is not in the format YYYY-MM-DD, as required for DynamoDB filtering.",
       (date) => moment(date, "YYYY-MM-DD", true).isValid()
     )
     .required(),
-  sellerId: yup.string().required(),
+  airportId: yup.string().required(),
   address: addressSchema.required(),
   items: yup.array().of(itemSchema).required(),
 });

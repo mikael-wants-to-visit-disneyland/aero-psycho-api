@@ -1,12 +1,12 @@
 import { SQSHandler } from "aws-lambda";
-import { addOrder } from "../addOrder";
-import { IOrder } from "../interfaces";
+import { addFlight } from "../addFlight";
+import { IFlight } from "../interfaces";
 
 const receiver: SQSHandler = async (event) => {
   try {
     for (const record of event.Records) {
-      const order: IOrder = JSON.parse(record.body);
-      await addOrder(order, record.messageId);
+      const flight: IFlight = JSON.parse(record.body);
+      await addFlight(flight, record.messageId);
     }
   } catch (error) {
     console.log(error);
