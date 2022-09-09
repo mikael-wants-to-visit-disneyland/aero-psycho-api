@@ -1,5 +1,3 @@
-app: webhook
-org: mkoskela
 service: aws-node-typescript-sqs-standard
 
 plugins:

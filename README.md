@@ -18,25 +18,7 @@ curl --request POST '{ url }/dev/sender' \
      --data-raw '{
   "flightId": "5903",
   "date": "2022-01-09",
-  "airportId": "booboo",
-  "address": {
-    "line1": "Flat 4D, Norfolk Mansions",
-    "line2": "Lithos Road",
-    "city": "London",
-    "state": "England",
-    "postcode": "NW8 6DU",
-    "country": "UK"
-  },
-  "items": [
-    {
-      "product": "0-3jknjd03",
-      "description": "best console",
-      "name": "Nintendo Switch",
-      "unitPrice": "245",
-      "qty": "3",
-      "totalPrice": "800"
-    }
-  ]
+  "airportId": "0"
 }'
 ```
 
@@ -66,7 +48,7 @@ You can use any combination of these parameters.
 
 ### Adding attributes
 
-In flight to enable filtering by more attributes, simply add them to these two places:
+In order to enable filtering by more attributes, simply add them to these two places:
 
 1. `AttributeDefinitions` and `GlobalSecondaryIndexes` in `serverless.yml > resources > flightsTable`
 2. `queryStringParamsFilterAttributes` in `getFlights`
