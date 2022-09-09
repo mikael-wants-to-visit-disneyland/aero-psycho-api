@@ -64,21 +64,23 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
-          - AttributeName: airportId
-            AttributeType: S
-          - AttributeName: flightId
+          - AttributeName: flightCode
             AttributeType: S
           - AttributeName: date
+            AttributeType: S
+          - AttributeName: originAirportId
+            AttributeType: S
+          - AttributeName: destinationAirportId
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
-          - AttributeName: airportId
+          - AttributeName: originAirportId
             KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: secondaryIndex
             KeySchema:
-              - AttributeName: flightId
+              - AttributeName: flightCode
                 KeyType: HASH
               - AttributeName: date
                 KeyType: RANGE

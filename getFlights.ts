@@ -6,8 +6,9 @@ const queryStringParamsFilterAttributes: Record<
   string,
   { attribute: string; comparison: string }
 > = {
-  airportId: { attribute: "airportId", comparison: "=" },
-  flightId: { attribute: "flightId", comparison: "=" },
+  originAirportId: { attribute: "originAirportId", comparison: "=" },
+  destinationAirportId: { attribute: "destinationAirportId", comparison: "=" },
+  flightCode: { attribute: "flightCode", comparison: "=" },
   startDate: { attribute: "date", comparison: ">=" },
   endDate: { attribute: "date", comparison: "<=" },
 };

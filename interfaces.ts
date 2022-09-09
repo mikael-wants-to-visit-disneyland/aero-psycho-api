@@ -2,13 +2,14 @@ import * as yup from "yup";
 import moment from "moment";
 
 export interface IFlight {
-  flightId: string;
+  flightCode: string;
   date: string;
-  airportId: string;
+  originAirportId: string;
+  destinationAirportId: string;
 }
 
 export const flightSchema = yup.object().shape({
-  flightId: yup.string().required(),
+  flightCode: yup.string().required(),
   date: yup
     .string()
     .test(
@@ -17,5 +18,6 @@ export const flightSchema = yup.object().shape({
       (date) => moment(date, "YYYY-MM-DD", true).isValid()
     )
     .required(),
-  airportId: yup.string().required(),
+  originAirportId: yup.string().required(),
+  destinationAirportId: yup.string().required(),
 });
