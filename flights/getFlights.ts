@@ -16,12 +16,6 @@ const queryStringParamsFilterAttributes: Record<
   endDate: { attribute: "date", comparison: "<=" },
 };
 
-export const dataTypes = { airport: "airport", flights: "flights" };
-export const getDataTypedParams = (filterParams, dataType) => ({
-  ...filterParams,
-  dataType: dataType,
-});
-
 /* Transform the query string parameters into the DynamoDB filter expression, 
    alongside the expression's key and value input objects. */
 const getFilterExpressionParams: (filterParams: Record<string, string>) => {
@@ -68,9 +62,7 @@ module.exports.getFlights = async (event) => {
 
   const scanParams = {
     TableName: process.env.DYNAMODB_ORDERS_TABLE,
-    ...getFilterExpressionParams(
-      getDataTypedParams(event.queryStringParameters, dataTypes.flights)
-    ),
+    ...getFilterExpressionParams(event.queryStringParameters),
   };
   const dynamoDB = new DynamoDB.DocumentClient();
   const result = await dynamoDB.scan(scanParams).promise();

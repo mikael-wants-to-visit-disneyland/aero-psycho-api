@@ -18,7 +18,7 @@ curl --request POST '{ url }/dev/sender' \
      --data-raw '{
   "flightCode": "5903",
   "date": "2022-01-09",
-  "originAirportId": "0"
+  "originAirportCode": "0"
 }'
 ```
 
@@ -29,13 +29,13 @@ Note that all of these fields are required; they cannot be the empty string.
 Get all flights for a seller:
 
 ```
-curl --url '{ url }?originAirportId=booboo'
+curl --url '{ url }?originAirportCode=booboo'
 ```
 
-Get an flight by the `originAirportId` and `flightCode`:
+Get an flight by the `originAirportCode` and `flightCode`:
 
 ```
-curl --url '{ url }?originAirportId=booboo&flightCode=5903'
+curl --url '{ url }?originAirportCode=booboo&flightCode=5903'
 ```
 
 Get all flights between certain dates:

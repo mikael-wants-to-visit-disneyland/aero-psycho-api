@@ -6,20 +6,20 @@ export interface IFlight {
   date: string;
   estimatedDepartureTime: string;
   estimatedArrivalTime: string;
-  originAirportId: string;
-  destinationAirportId: string;
+  originAirportCode: string;
+  destinationAirportCode: string;
   mood: number;
   tiredness: number;
   love: number;
 }
 
-const dateTest = (date) => moment(date, "YYYY-MM-DD", true).isValid()
-const timeTest = (time) => moment(time, "HH:mm:ss", true).isValid()
+const dateTest = (date) => moment(date, "YYYY-MM-DD", true).isValid();
+const timeTest = (time) => moment(time, "HH:mm:ss", true).isValid();
 
 export const flightSchema = yup.object().shape({
   flightCode: yup.string().required(),
-  originAirportId: yup.string().required(),
-  destinationAirportId: yup.string().required(),
+  originAirportCode: yup.string().required(),
+  destinationAirportCode: yup.string().required(),
   date: yup
     .string()
     .test(

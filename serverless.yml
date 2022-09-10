@@ -64,35 +64,23 @@ resources:
       Properties:
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: originAirportCode
+            AttributeType: S
+          - AttributeName: dataType
             AttributeType: S
           - AttributeName: flightCode
-            AttributeType: S
-          - AttributeName: date
-            AttributeType: S
-          - AttributeName: originAirportId
-            AttributeType: S
-          - AttributeName: destinationAirportId
             AttributeType: S
         KeySchema:
-          - AttributeName: id
-            KeyType: HASH
           - AttributeName: flightCode
+            KeyType: HASH
+          - AttributeName: dataType
             KeyType: RANGE
         GlobalSecondaryIndexes:
-          - IndexName: originDateIndex
+          - IndexName: flightAirportIndex
             KeySchema:
-              - AttributeName: originAirportId
+              - AttributeName: flightCode
                 KeyType: HASH
-              - AttributeName: date
-                KeyType: RANGE
-            Projection:
-              ProjectionType: "ALL"
-          - IndexName: destinationDateIndex
-            KeySchema:
-              - AttributeName: destinationAirportId
-                KeyType: HASH
-              - AttributeName: date
+              - AttributeName: originAirportCode
                 KeyType: RANGE
             Projection:
               ProjectionType: "ALL"
