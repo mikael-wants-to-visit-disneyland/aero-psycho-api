@@ -2,9 +2,9 @@
 import { DynamoDB } from "aws-sdk";
 import _ from "lodash";
 import { dataTypes, getFilterExpressionParams } from "./dbFiltering";
+import { IFlight } from "./interfaces";
 
 module.exports.getFlights = async (event) => {
-  console.log(event);
   const scanParams = {
     TableName: process.env.DYNAMODB_ORDERS_TABLE,
     ...getFilterExpressionParams(
@@ -22,9 +22,14 @@ module.exports.getFlights = async (event) => {
     };
   }
 
+  const flights: IFlight[] = result.Items.map((flight) => {
+    const { mood, tiredness, love, ...rest } = flight;
+    return { ...rest, sensorData: { mood, tiredness, love } } as IFlight;
+  });
+
   return {
     statusCode: 200,
-    body: JSON.stringify(result.Items),
+    body: JSON.stringify(flights),
     headers: { "Content-Type": "application/json" },
   };
 };

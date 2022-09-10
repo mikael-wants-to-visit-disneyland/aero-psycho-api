@@ -8,9 +8,7 @@ export interface IFlight {
   estimatedArrivalTime: string;
   airportCode: string;
   departureAirportCode: string;
-  mood: number;
-  tiredness: number;
-  love: number;
+  sensorData: ISensorData;
 }
 
 export interface IAirport {
@@ -19,8 +17,20 @@ export interface IAirport {
   suffix: string;
 }
 
+export interface ISensorData {
+  mood: number;
+  tiredness: number;
+  love: number;
+}
+
 const dateTest = (date) => moment(date, "YYYY-MM-DD", true).isValid();
 const timeTest = (time) => moment(time, "HH:mm:ss", true).isValid();
+
+export const sensorDataSchema = yup.object().shape({
+  mood: yup.number().required(),
+  tiredness: yup.number().required(),
+  love: yup.number().required(),
+});
 
 export const airportSchema = yup.object().shape({
   airportCode: yup.string().required(),
@@ -56,7 +66,5 @@ export const flightSchema = yup.object().shape({
       timeTest
     )
     .required(),
-  mood: yup.number().required(),
-  tiredness: yup.number().required(),
-  love: yup.number().required(),
+  sensorData: sensorDataSchema,
 });
