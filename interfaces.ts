@@ -6,20 +6,32 @@ export interface IFlight {
   date: string;
   estimatedDepartureTime: string;
   estimatedArrivalTime: string;
-  originAirportCode: string;
-  destinationAirportCode: string;
+  airportCode: string;
+  departureAirportCode: string;
   mood: number;
   tiredness: number;
   love: number;
 }
 
+export interface IAirport {
+  airportCode: string;
+  location: string;
+  suffix: string;
+}
+
 const dateTest = (date) => moment(date, "YYYY-MM-DD", true).isValid();
 const timeTest = (time) => moment(time, "HH:mm:ss", true).isValid();
 
+export const airportSchema = yup.object().shape({
+  airportCode: yup.string().required(),
+  location: yup.string().required(),
+  suffix: yup.string().required(),
+});
+
 export const flightSchema = yup.object().shape({
   flightCode: yup.string().required(),
-  originAirportCode: yup.string().required(),
-  destinationAirportCode: yup.string().required(),
+  airportCode: yup.string().required(),
+  departureAirportCode: yup.string().required(),
   date: yup
     .string()
     .test(

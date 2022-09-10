@@ -3,13 +3,12 @@ import { DynamoDB } from "aws-sdk";
 import _ from "lodash";
 import { dataTypes, getFilterExpressionParams } from "./dbFiltering";
 
-module.exports.getFlights = async (event) => {
-  console.log(event);
+module.exports.getAirports = async (event) => {
   const scanParams = {
     TableName: process.env.DYNAMODB_ORDERS_TABLE,
     ...getFilterExpressionParams(
       event.queryStringParameters || {},
-      dataTypes.flight
+      dataTypes.airport
     ),
   };
   const dynamoDB = new DynamoDB.DocumentClient();

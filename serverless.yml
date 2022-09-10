@@ -24,6 +24,7 @@ provider:
             - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-sender-${sls:stage}
             - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-receiver-${sls:stage}
             - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-getFlights-${sls:stage}
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-getAirports-${sls:stage}
             - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-flightsTable-${sls:stage}
   environment:
     DYNAMODB_ORDERS_TABLE: ${self:service}-flightsTable-${sls:stage}
@@ -52,6 +53,13 @@ functions:
           path: /getFlights
           method: get
 
+  getAirports:
+    handler: getAirports.getAirports
+    events:
+      - httpApi:
+          path: /getAirports
+          method: get
+
 resources:
   Resources:
     receiverQueue:
@@ -64,23 +72,23 @@ resources:
       Properties:
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          - AttributeName: destinationAirportCode
+          - AttributeName: airportCode
             AttributeType: S
           - AttributeName: dataType
             AttributeType: S
           - AttributeName: flightCode
             AttributeType: S
         KeySchema:
-          - AttributeName: flightCode
+          - AttributeName: airportCode
             KeyType: HASH
-          - AttributeName: dataType
+          - AttributeName: flightCode
             KeyType: RANGE
         GlobalSecondaryIndexes:
-          - IndexName: flightAirportIndex
+          - IndexName: airportCodeDataTypeIndex
             KeySchema:
-              - AttributeName: flightCode
+              - AttributeName: airportCode
                 KeyType: HASH
-              - AttributeName: destinationAirportCode
+              - AttributeName: dataType
                 KeyType: RANGE
             Projection:
               ProjectionType: "ALL"
