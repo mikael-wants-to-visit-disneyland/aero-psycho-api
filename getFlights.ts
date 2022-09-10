@@ -6,6 +6,7 @@ const queryStringParamsFilterAttributes: Record<
   string,
   { attribute: string; comparison: string }
 > = {
+  dataType: { attribute: "dataType", comparison: "=" },
   originAirportCode: { attribute: "originAirportCode", comparison: "=" },
   destinationAirportCode: {
     attribute: "destinationAirportCode",
@@ -16,7 +17,7 @@ const queryStringParamsFilterAttributes: Record<
   endDate: { attribute: "date", comparison: "<=" },
 };
 
-export const dataTypes = { airport: "airport", flights: "flights" };
+export const dataTypes = { airport: "airport", flights: "flight" };
 export const getDataTypedParams = (filterParams, dataType) => ({
   ...filterParams,
   dataType: dataType,
@@ -29,6 +30,7 @@ const getFilterExpressionParams: (filterParams: Record<string, string>) => {
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
 } = (filterParams) => {
+  console.log(filterParams);
   const FilterExpression = Object.keys(filterParams)
     .map(
       (name, i) =>

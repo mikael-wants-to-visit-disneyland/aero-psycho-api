@@ -64,7 +64,7 @@ resources:
       Properties:
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
-          - AttributeName: originAirportCode
+          - AttributeName: destinationAirportCode
             AttributeType: S
           - AttributeName: dataType
             AttributeType: S
@@ -80,7 +80,7 @@ resources:
             KeySchema:
               - AttributeName: flightCode
                 KeyType: HASH
-              - AttributeName: originAirportCode
+              - AttributeName: destinationAirportCode
                 KeyType: RANGE
             Projection:
               ProjectionType: "ALL"
