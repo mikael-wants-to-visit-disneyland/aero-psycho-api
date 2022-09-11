@@ -10,7 +10,6 @@ export const addFlight = async (flight: IFlight) => {
   await dynamoDb
     .put({
       TableName: process.env.DYNAMODB_ORDERS_TABLE,
-      ConditionExpression: "attribute_not_exists(flightCode)", // Ensures idempotency, as explained in https://cloudonaut.io/your-lambda-function-might-execute-twice-deal-with-it/
       Item: { ...rest, ...sensorData },
     })
     .promise();

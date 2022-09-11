@@ -39,7 +39,6 @@ export const getFilterExpressionParams: (
     ...filterParams,
     dataType: dataType,
   };
-  console.log(augmentedParams);
   const FilterExpression = Object.keys(augmentedParams)
     .map(
       (name, i) =>
